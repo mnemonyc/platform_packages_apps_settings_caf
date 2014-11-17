@@ -242,11 +242,7 @@ public class LightSettingsDialog extends AlertDialog implements
 
     @SuppressWarnings("unchecked")
     public int getPulseSpeedOn() {
-        if (mPulseSpeedOn.isEnabled()) {
-            return ((Pair<String, Integer>) mPulseSpeedOn.getSelectedItem()).second;
-        } else {
-            return 1;
-        }
+        return ((Pair<String, Integer>) mPulseSpeedOn.getSelectedItem()).second;
     }
 
     @SuppressWarnings("unchecked")

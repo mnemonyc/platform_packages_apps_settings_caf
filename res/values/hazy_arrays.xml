@@ -16,7 +16,7 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     
-    <!-- Values for the notification light pulse spinners -->
+    <!-- Notification light -->
     <string-array name="notification_pulse_length_entries" translatable="false">
         <item>@string/pulse_length_always_on</item>
         <item>@string/pulse_length_very_short</item>
@@ -51,6 +51,7 @@
         <item>5000</item>
     </string-array>
 
+    <!-- Battery -->
     <string-array name="status_bar_battery_style_entries" translatable="false">
         <item>@string/status_bar_battery_style_icon_portrait</item>
         <item>@string/status_bar_battery_style_icon_landscape</item>

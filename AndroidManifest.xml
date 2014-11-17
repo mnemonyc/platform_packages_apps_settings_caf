@@ -2413,7 +2413,11 @@
 
         <activity android:name=".notificationlight.NotificationLightSettings" />
         <activity android:name=".notificationlight.BatteryLightSettings" />
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 28a5551... [2/2] Settings: Battery and Notification Lights
         <receiver android:name=".widget.SettingsAppWidgetProvider"
                 android:label="@string/gadget_title"
                 android:exported="false"

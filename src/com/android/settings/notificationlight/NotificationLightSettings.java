@@ -42,11 +42,12 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.android.internal.logging.MetricsLogger;
+
 import com.android.settings.R;
 import com.android.settings.SettingsPreferenceFragment;
-import android.preference.SwitchPreference;
-import com.android.settings.cyanogenmod.PackageListAdapter;
-import com.android.settings.cyanogenmod.PackageListAdapter.PackageItem;
+import com.android.settings.nexus.PackageListAdapter;
+import com.android.settings.nexus.PackageListAdapter.PackageItem;
+import com.android.settings.preference.SystemSettingSwitchPreference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,8 +80,8 @@ public class NotificationLightSettings extends SettingsPreferenceFragment implem
     private int mDefaultLedOff;
     private PackageManager mPackageManager;
     private PreferenceGroup mApplicationPrefList;
-    private SwitchPreference mEnabledPref;
-    private SwitchPreference mCustomEnabledPref;
+    private SystemSettingSwitchPreference mEnabledPref;
+    private SystemSettingSwitchPreference mCustomEnabledPref;
     private ApplicationLightPreference mDefaultPref;
     private ApplicationLightPreference mCallPref;
     private ApplicationLightPreference mVoicemailPref;
@@ -114,11 +115,10 @@ public class NotificationLightSettings extends SettingsPreferenceFragment implem
                 com.android.internal.R.integer.config_defaultNotificationLedOn);
         mDefaultLedOff = resources.getInteger(
                 com.android.internal.R.integer.config_defaultNotificationLedOff);
-
-        mEnabledPref = (SwitchPreference)
+        mEnabledPref = (SystemSettingSwitchPreference)
                 findPreference(Settings.System.NOTIFICATION_LIGHT_PULSE);
         mEnabledPref.setOnPreferenceChangeListener(this);
-        mCustomEnabledPref = (SwitchPreference)
+        mCustomEnabledPref = (SystemSettingSwitchPreference)
                 findPreference(Settings.System.NOTIFICATION_LIGHT_PULSE_CUSTOM_ENABLE);
         mCustomEnabledPref.setOnPreferenceChangeListener(this);
 
@@ -158,7 +158,7 @@ public class NotificationLightSettings extends SettingsPreferenceFragment implem
 
     @Override
     protected int getMetricsCategory() {
-        return MetricsLogger.APPLICATION;
+        return MetricsLogger.DISPLAY;
     }
 
     @Override
@@ -425,7 +425,7 @@ public class NotificationLightSettings extends SettingsPreferenceFragment implem
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         mMenu = menu;
-        mMenu.add(0, MENU_ADD, 0, R.string.profiles_add)
+        mMenu.add(0, MENU_ADD, 0, R.string.add)
                 .setIcon(R.drawable.ic_menu_add_white)
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
     }
@@ -457,8 +457,7 @@ public class NotificationLightSettings extends SettingsPreferenceFragment implem
             case DIALOG_APPS:
                 final ListView list = new ListView(getActivity());
                 list.setAdapter(mPackageAdapter);
-
-                builder.setTitle(R.string.profile_choose_app);
+                builder.setTitle(R.string.choose_app);
                 builder.setView(list);
                 dialog = builder.create();
 
