@@ -83,6 +83,7 @@ public class NotificationLightSettings extends SettingsPreferenceFragment implem
     private PreferenceGroup mApplicationPrefList;
     private SwitchPreference mEnabledPref;
     private SwitchPreference mCustomEnabledPref;
+    private SwitchPreference mScreenOnLightsPref;
     private ApplicationLightPreference mDefaultPref;
     private ApplicationLightPreference mCallPref;
     private ApplicationLightPreference mVoicemailPref;
@@ -122,12 +123,16 @@ public class NotificationLightSettings extends SettingsPreferenceFragment implem
         mEnabledPref = (SwitchPreference)
                 findPreference(Settings.System.NOTIFICATION_LIGHT_PULSE);
         mEnabledPref.setOnPreferenceChangeListener(this);
-        mCustomEnabledPref = (SwitchPreference)
-                findPreference(Settings.System.NOTIFICATION_LIGHT_PULSE_CUSTOM_ENABLE);
-        mCustomEnabledPref.setOnPreferenceChangeListener(this);
 
         mDefaultPref = (ApplicationLightPreference) findPreference(DEFAULT_PREF);
         mDefaultPref.setOnPreferenceChangeListener(this);
+
+        mScreenOnLightsPref = (SystemSettingSwitchPreference)
+                findPreference(Settings.System.NOTIFICATION_LIGHT_SCREEN_ON);
+        mScreenOnLightsPref.setOnPreferenceChangeListener(this);
+        mCustomEnabledPref = (SystemSettingSwitchPreference)
+                findPreference(Settings.System.NOTIFICATION_LIGHT_PULSE_CUSTOM_ENABLE);
+        mCustomEnabledPref.setOnPreferenceChangeListener(this);
 
         // Missed call and Voicemail preferences should only show on devices with a voice capabilities
         TelephonyManager tm = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
@@ -415,7 +420,8 @@ public class NotificationLightSettings extends SettingsPreferenceFragment implem
     }
 
     public boolean onPreferenceChange(Preference preference, Object objValue) {
-        if (preference == mEnabledPref || preference == mCustomEnabledPref) {
+        if (preference == mEnabledPref || preference == mCustomEnabledPref ||
+                preference == mScreenOnLightsPref) {
             getActivity().invalidateOptionsMenu();
         } else {
             ApplicationLightPreference lightPref = (ApplicationLightPreference) preference;
