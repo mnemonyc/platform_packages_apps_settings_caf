@@ -92,13 +92,13 @@
                 android:persistent="false" />
 
         <!-- Double tap to sleep -->
-        <SwitchPreference
+        <com.android.settings.hazy.SystemSettingSwitchPreference
                 android:key="double_tap_sleep_gesture"
                 android:title="@string/double_tap_to_sleep_title"
                 android:summary="@string/double_tap_to_sleep_summary"
                 android:defaultValue="true" />
 
-                <com.android.settings.WarnedListPreference
+        <com.android.settings.WarnedListPreference
                 android:key="font_size"
                 android:title="@string/title_font_size"
                 settings:keywords="@string/keywords_display_font_size"
