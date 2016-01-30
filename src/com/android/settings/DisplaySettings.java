@@ -411,7 +411,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
 
         // Update tap to sleep.
         if (mTapToSleepPreference != null) {
-            int value = Settings.Secure.getInt(getContentResolver(), DOUBLE_TAP_SLEEP_GESTURE, 0);
+            int value = Settings.System.getInt(getContentResolver(), DOUBLE_TAP_SLEEP_GESTURE, 0);
             mTapToSleepPreference.setChecked(value != 0);
         }
 
@@ -484,7 +484,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
         }
         if (preference == mTapToSleepPreference) {
             boolean value = (Boolean) objValue;
-            Settings.Secure.putInt(getContentResolver(), DOUBLE_TAP_SLEEP_GESTURE, value ? 1 : 0);
+            Settings.System.putInt(getContentResolver(), DOUBLE_TAP_SLEEP_GESTURE, value ? 1 : 0);
         }
         if (preference == mCameraGesturePreference) {
             boolean value = (Boolean) objValue;
