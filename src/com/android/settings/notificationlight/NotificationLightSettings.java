@@ -44,7 +44,7 @@ import android.widget.ListView;
 import com.android.internal.logging.MetricsLogger;
 import com.android.settings.R;
 import com.android.settings.SettingsPreferenceFragment;
-import com.android.settings.chroma.SystemSettingSwitchPreference;
+import com.android.settings.hazy.SystemSettingSwitchPreference;
 import com.android.settings.cyanogenmod.PackageListAdapter;
 import com.android.settings.cyanogenmod.PackageListAdapter.PackageItem;
 
