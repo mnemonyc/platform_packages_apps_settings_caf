@@ -36,7 +36,7 @@
                 android:id="@+id/bluetooth_settings"
                 android:title="@string/bluetooth_settings_title"
                 android:fragment="com.android.settings.bluetooth.BluetoothSettings"
-                android:icon="@drawable/ic_settings_bluetooth"
+                android:icon="@drawable/ic_settings_bluetooth2"
                 />
 
         <!-- SIM Cards -->
@@ -91,7 +91,7 @@
                 android:id="@+id/display_settings"
                 android:title="@string/display_settings"
                 android:fragment="com.android.settings.DisplaySettings"
-                android:icon="@drawable/ic_settings_display"
+                android:icon="@drawable/ic_settings_display_am"
                 />
 
         <!-- Notifications -->
@@ -190,7 +190,9 @@
                 />
 
         <!-- Marker for where to place external tiles in this category -->
-        <external-tiles />
+        <external-tiles 
+                android:icon="@drawable/ic_settings_google"
+                />
 
         <!-- Language -->
         <dashboard-tile
