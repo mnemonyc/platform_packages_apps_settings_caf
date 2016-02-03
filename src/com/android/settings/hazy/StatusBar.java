@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2013 SlimRoms Project
- * Copyright (C) 2014 Screw'd Android
+ * Copyright (C) 2016 The Hazy Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.android.settings.screwd;
+package com.android.settings.hazy;
 
 import android.provider.SearchIndexableResource;
 import com.android.settings.search.BaseSearchIndexProvider;
@@ -65,7 +65,7 @@ public class StatusBar extends SettingsPreferenceFragment implements OnPreferenc
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        addPreferencesFromResource(R.xml.screwd_statusbar_settings);
+        addPreferencesFromResource(R.xml.display_settings);
 
         PreferenceScreen prefSet = getPreferenceScreen();
 		
@@ -102,7 +102,7 @@ public class StatusBar extends SettingsPreferenceFragment implements OnPreferenc
                 new ArrayList<SearchIndexableResource>();
 
             SearchIndexableResource sir = new SearchIndexableResource(context);
-            sir.xmlResId = R.xml.screwd_statusbar_settings;
+            sir.xmlResId = R.xml.display_settings;
             result.add(sir);
 
             return result;
