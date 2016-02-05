@@ -189,11 +189,17 @@
                 android:icon="@drawable/ic_settings_accounts"
                 />
 
-        <!-- Marker for where to place external tiles in this category -->
-        <external-tiles 
-                android:icon="@drawable/ic_settings_google"
-                />
-
+             <!-- Google Settings -->
+        <dashboard-tile
+            android:id="@+id/google_settings"
+            android:icon="@drawable/ic_settings_google"
+            android:title="@string/google_title">
+            <intent
+                android:action="android.intent.action.MAIN"
+                android:targetPackage="com.google.android.gms"
+                android:targetClass="com.google.android.gms.app.settings.GoogleSettingsLink" />
+        </dashboard-tile>
+ 
         <!-- Language -->
         <dashboard-tile
                 android:id="@+id/language_settings"

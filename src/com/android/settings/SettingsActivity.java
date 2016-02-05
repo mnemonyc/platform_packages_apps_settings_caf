@@ -1288,7 +1288,17 @@ public class SettingsActivity extends Activity
                             removeTile = true;
                         }
                     }
-                } else if (id == R.id.print_settings) {
+                } else if (id == R.id.google_settings) {
+                    // Embedding into Settings is supported from Google Settings
+                    boolean supported = false;
+                    try {
+                        supported = (getPackageManager().getPackageInfo("com.google.android.gms", 0).versionCode >= 1);
+                    } catch (PackageManager.NameNotFoundException e) {
+                    }
+                    if (!supported) {
+                        removeTile = true;
+                    }
+                 } else if (id == R.id.print_settings) {
                     boolean hasPrintingSupport = getPackageManager().hasSystemFeature(
                             PackageManager.FEATURE_PRINTING);
                     if (!hasPrintingSupport) {
