@@ -131,7 +131,7 @@
                 android:id="@+id/manage_memory"
                 android:title="@string/memory_settings_title"
                 android:fragment="com.android.settings.applications.ProcessStatsSummary"
-                android:icon="@drawable/ic_settings_memory"
+                android:icon="@drawable/ic_settings_memory2"
                 />
 
         <!-- Manage users -->
