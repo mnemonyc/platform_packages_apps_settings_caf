@@ -115,11 +115,11 @@
     <dimen name="dashboard_tile_minimum_height">72dp</dimen>
 
     <!-- Dashboard image tile size -->
-    <dimen name="dashboard_tile_image_size">48dp</dimen>
+    <dimen name="dashboard_tile_image_size">56dp</dimen>
 
     <!-- Dashboard tile image margin start / end -->
-    <dimen name="dashboard_tile_image_margin_start">4dp</dimen>
-    <dimen name="dashboard_tile_image_margin_end">20dp</dimen>
+    <dimen name="dashboard_tile_image_margin_start">0dp</dimen>
+    <dimen name="dashboard_tile_image_margin_end">18dp</dimen>
 
     <!-- SwitchBar margin start / end -->
     <dimen name="switchbar_margin_start">16dp</dimen>
