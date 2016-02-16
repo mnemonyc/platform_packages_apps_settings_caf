@@ -30,6 +30,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceGroup;
 import android.preference.PreferenceScreen;
+import android.preference.SwitchPreference;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -45,9 +46,8 @@ import com.android.internal.logging.MetricsLogger;
 
 import com.android.settings.R;
 import com.android.settings.SettingsPreferenceFragment;
-import com.android.settings.nexus.PackageListAdapter;
-import com.android.settings.nexus.PackageListAdapter.PackageItem;
-import com.android.settings.preference.SystemSettingSwitchPreference;
+import com.android.settings.hazy.PackageListAdapter;
+import com.android.settings.hazy.PackageListAdapter.PackageItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -80,8 +80,8 @@ public class NotificationLightSettings extends SettingsPreferenceFragment implem
     private int mDefaultLedOff;
     private PackageManager mPackageManager;
     private PreferenceGroup mApplicationPrefList;
-    private SystemSettingSwitchPreference mEnabledPref;
-    private SystemSettingSwitchPreference mCustomEnabledPref;
+    private SwitchPreference mEnabledPref;
+    private SwitchPreference mCustomEnabledPref;
     private ApplicationLightPreference mDefaultPref;
     private ApplicationLightPreference mCallPref;
     private ApplicationLightPreference mVoicemailPref;
@@ -112,10 +112,10 @@ public class NotificationLightSettings extends SettingsPreferenceFragment implem
                 com.android.internal.R.integer.config_defaultNotificationLedOn);
         mDefaultLedOff = resources.getInteger(
                 com.android.internal.R.integer.config_defaultNotificationLedOff);
-        mEnabledPref = (SystemSettingSwitchPreference)
+        mEnabledPref = (SwitchPreference)
                 findPreference(Settings.System.NOTIFICATION_LIGHT_PULSE);
         mEnabledPref.setOnPreferenceChangeListener(this);
-        mCustomEnabledPref = (SystemSettingSwitchPreference)
+        mCustomEnabledPref = (SwitchPreference)
                 findPreference(Settings.System.NOTIFICATION_LIGHT_PULSE_CUSTOM_ENABLE);
         mCustomEnabledPref.setOnPreferenceChangeListener(this);
 
