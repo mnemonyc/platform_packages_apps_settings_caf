@@ -127,10 +127,10 @@ public class NotificationLightSettings extends SettingsPreferenceFragment implem
         mDefaultPref = (ApplicationLightPreference) findPreference(DEFAULT_PREF);
         mDefaultPref.setOnPreferenceChangeListener(this);
 
-        mScreenOnLightsPref = (SystemSettingSwitchPreference)
+        mScreenOnLightsPref = (SwitchPreference)
                 findPreference(Settings.System.NOTIFICATION_LIGHT_SCREEN_ON);
         mScreenOnLightsPref.setOnPreferenceChangeListener(this);
-        mCustomEnabledPref = (SystemSettingSwitchPreference)
+        mCustomEnabledPref = (SwitchPreference)
                 findPreference(Settings.System.NOTIFICATION_LIGHT_PULSE_CUSTOM_ENABLE);
         mCustomEnabledPref.setOnPreferenceChangeListener(this);
 
