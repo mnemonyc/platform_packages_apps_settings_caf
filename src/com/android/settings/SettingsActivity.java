@@ -1325,62 +1325,61 @@ public class SettingsActivity extends Activity
         addExternalTiles(target);
     }
 
-    private void addExternalTiles(List<DashboardCategory> target) {
-        Map<Pair<String, String>, DashboardTile> addedCache =
-                new ArrayMap<Pair<String, String>, DashboardTile>();
-        UserManager userManager = UserManager.get(this);
-        for (UserHandle user : userManager.getUserProfiles()) {
-            addExternalTiles(target, user, addedCache);
-        }
-    }
-
-    private void addExternalTiles(List<DashboardCategory> target, UserHandle user,
-            Map<Pair<String, String>, DashboardTile> addedCache) {
-        PackageManager pm = getPackageManager();
-        Intent intent = new Intent(EXTRA_SETTINGS_ACTION);
-        List<ResolveInfo> results = pm.queryIntentActivitiesAsUser(intent,
-                PackageManager.GET_META_DATA, user.getIdentifier());
-        for (ResolveInfo resolved : results) {
-            if (!resolved.system) {
-                // Do not allow any app to add to settings, only system ones.
-                continue;
-            }
-            ActivityInfo activityInfo = resolved.activityInfo;
-            Bundle metaData = activityInfo.metaData;
-            if ((metaData == null) || !metaData.containsKey(EXTRA_CATEGORY_KEY)) {
-                Log.w(LOG_TAG, "Found " + resolved.activityInfo.name + " for action "
-                        + EXTRA_SETTINGS_ACTION + " missing metadata " +
-                        (metaData == null ? "" : EXTRA_CATEGORY_KEY));
-                continue;
-            }
-            String categoryKey = metaData.getString(EXTRA_CATEGORY_KEY);
-            DashboardCategory category = getCategory(target, categoryKey);
-            if (category == null) {
-                Log.w(LOG_TAG, "Activity " + resolved.activityInfo.name + " has unknown "
-                        + "category key " + categoryKey);
-                continue;
-            }
-            Pair<String, String> key = new Pair<String, String>(activityInfo.packageName,
-                    activityInfo.name);
-            DashboardTile tile = addedCache.get(key);
-            if (tile == null) {
-                tile = new DashboardTile();
-                tile.intent = new Intent().setClassName(
-                        activityInfo.packageName, activityInfo.name);
-                Utils.updateTileToSpecificActivityFromMetaDataOrRemove(this, tile);
-
-                if (category.externalIndex == -1) {
-                    // If no location for external tiles has been specified for this category,
-                    // then just put them at the end.
-                    category.addTile(tile);
-                } else {
-                    category.addTile(category.externalIndex, tile);
-                }
-                addedCache.put(key, tile);
-            }
-            tile.userHandle.add(user);
-        }
-    }
+    private void addExternalTiles(List<DashboardCategory> target) { 
+        Map<Pair<String, String>, DashboardTile> addedCache = 
+                new ArrayMap<Pair<String, String>, DashboardTile>(); 
+        UserManager userManager = UserManager.get(this); 
+        for (UserHandle user : userManager.getUserProfiles()) { 
+            addExternalTiles(target, user, addedCache); 
+        } 
+    } 
+ 
+    private void addExternalTiles(List<DashboardCategory> target, UserHandle user, 
+            Map<Pair<String, String>, DashboardTile> addedCache) { 
+        PackageManager pm = getPackageManager(); 
+        Intent intent = new Intent(EXTRA_SETTINGS_ACTION); 
+        List<ResolveInfo> results = pm.queryIntentActivitiesAsUser(intent, 
+                PackageManager.GET_META_DATA, user.getIdentifier()); 
+        for (ResolveInfo resolved : results) { 
+            if (!resolved.system) { 
+                // Do not allow any app to add to settings, only system ones. 
+                continue; 
+            } 
+            ActivityInfo activityInfo = resolved.activityInfo; 
+            Bundle metaData = activityInfo.metaData; 
+            if ((metaData == null) || !metaData.containsKey(EXTRA_CATEGORY_KEY)) { 
+                Log.w(LOG_TAG, "Found " + resolved.activityInfo.name + " for action " 
+                        + EXTRA_SETTINGS_ACTION + " missing metadata " + 
+                        (metaData == null ? "" : EXTRA_CATEGORY_KEY)); 
+                continue; 
+            } 
+            String categoryKey = metaData.getString(EXTRA_CATEGORY_KEY); 
+            DashboardCategory category = getCategory(target, categoryKey); 
+            if (category == null) { 
+                Log.w(LOG_TAG, "Activity " + resolved.activityInfo.name + " has unknown " 
+                        + "category key " + categoryKey); 
+                continue; 
+            } 
+            Pair<String, String> key = new Pair<String, String>(activityInfo.packageName, 
+                    activityInfo.name); 
+            DashboardTile tile = addedCache.get(key); 
+            if (tile == null) { 
+                tile = new DashboardTile(); 
+                tile.intent = new Intent().setClassName( 
+                        activityInfo.packageName, activityInfo.name); 
+                Utils.updateTileToSpecificActivityFromMetaDataOrRemove(this, tile); 
+                if (category.externalIndex == -1) { 
+                    // If no location for external tiles has been specified for this category, 
+                    // then just put them at the end. 
+                    category.addTile(tile); 
+                } else { 
+                    category.addTile(category.externalIndex, tile); 
+                } 
+                addedCache.put(key, tile); 
+            } 
+            tile.userHandle.add(user); 
+        } 
+    } 
 
     private DashboardCategory getCategory(List<DashboardCategory> target, String categoryKey) {
         for (DashboardCategory category : target) {
