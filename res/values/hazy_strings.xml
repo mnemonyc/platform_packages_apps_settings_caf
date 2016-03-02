@@ -117,5 +117,8 @@
     <!-- Volume button music controls -->
     <string name="volbtn_music_controls_title">Volume music controls</string>
     <string name="volbtn_music_controls_summary">Volume button control music</string>
- 
- </resources>
+
+    <!-- SystemUI Tuner Parts --> 
+    <string name="systemui_tuner_qs_title">Quick Settings</string>
+
+</resources>

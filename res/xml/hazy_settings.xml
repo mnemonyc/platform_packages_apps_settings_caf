@@ -25,15 +25,15 @@
 
         <!-- Pulse notification light -->
         <PreferenceScreen
-                android:key="notification_light"
-                android:title="@string/notification_light_title"
-                android:fragment="com.android.settings.notificationlight.NotificationLightSettings" />
+            android:key="notification_light"
+            android:title="@string/notification_light_title"
+            android:fragment="com.android.settings.notificationlight.NotificationLightSettings" />
 
         <!-- Battery light -->
         <PreferenceScreen
-                android:key="battery_light"
-                android:title="@string/battery_light_title"
-                android:fragment="com.android.settings.notificationlight.BatteryLightSettings" />
+            android:key="battery_light"
+            android:title="@string/battery_light_title"
+            android:fragment="com.android.settings.notificationlight.BatteryLightSettings" />
 
     </PreferenceCategory>
 
@@ -44,16 +44,26 @@
 
         <!-- Double tap to sleep -->
         <SwitchPreference
-        android:key="double_tap_sleep_gesture"
-        android:title="@string/double_tap_to_sleep_title"
-        android:summary="@string/double_tap_to_sleep_summary"
-        android:defaultValue="false" />
+            android:key="double_tap_sleep_gesture"
+            android:title="@string/double_tap_to_sleep_title"
+            android:summary="@string/double_tap_to_sleep_summary"
+            android:defaultValue="false" />
 
         <PreferenceScreen
-        android:fragment="com.android.settings.hazy.BatterySettings"
-        android:key="battery_style_pref"
-        android:title="@string/battery_title"
-        android:summary="@string/battery2_summary" />
+            android:fragment="com.android.settings.hazy.BatterySettings"
+            android:key="battery_style_pref"
+            android:title="@string/battery_title"
+            android:summary="@string/battery2_summary" />
+
+        <PreferenceScreen  
+            android:key="systemuituner"  
+            android:title="@string/systemui_tuner_qs_title"  
+            android:layout="@layout/preference_systemui_tuner" >  
+            <intent  
+                android:action="android.intent.action.MAIN"  
+                android:targetPackage="com.android.systemui"  
+                android:targetClass="com.android.systemui.tuner.QsActivity" />  
+        </PreferenceScreen>  
 
     </PreferenceCategory>
 
