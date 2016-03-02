@@ -102,5 +102,20 @@
 
     <!-- Google -->
     <string name="google_title">Google</string>
+
+    <!-- Hazy Settings -->
+    <string name="hazy_settings">Hazy Settings</string>
+    <string name="hazy_notification_settings">Notification</string>
+    <string name="hazy_statusbar_settings">Statusbar</string>
+    <string name="hazy_navbar_settings">Navbar</string>
+    <string name="hazy_button_settings">Button</string>
+
+    <!-- Switch last app -->
+    <string name="switch_last_app_title">Recent switch last app</string>
+    <string name="switch_last_app_summary">Longpress recent button to switch last app</string>
+
+    <!-- Volume button music controls -->
+    <string name="volbtn_music_controls_title">Volume music controls</string>
+    <string name="volbtn_music_controls_summary">Volume button control music</string>
  
  </resources>
