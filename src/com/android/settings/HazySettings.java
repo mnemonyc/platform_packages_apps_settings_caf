@@ -58,6 +58,7 @@ public class HazySettings extends SettingsPreferenceFragment implements
     private static final String TAG = "HazySettings";
 
     private static final String DOUBLE_TAP_SLEEP_GESTURE = "double_tap_sleep_gesture";
+    private static final String SMART_PULLDOWN = "smart_pulldown";
     private static final String STATUS_BAR_QUICK_QS_PULLDOWN = "status_bar_quick_qs_pulldown";
     private static final String SWITCH_LAST_APP = "switch_last_app";
     private static final String VOLBTN_MUSIC_CONTROLS = "volbtn_music_controls";
@@ -67,6 +68,7 @@ public class HazySettings extends SettingsPreferenceFragment implements
     private final Configuration mCurConfig = new Configuration();
 
     private ListPreference mQuickPulldown;
+    private ListPreference mSmartPulldown;
 
     private SwitchPreference mTapToSleepPreference;
     private SwitchPreference mSwitchLastApp;
@@ -96,6 +98,13 @@ public class HazySettings extends SettingsPreferenceFragment implements
         mQuickPulldown.setValue(String.valueOf(quickPulldown));
         mQuickPulldown.setSummary(mQuickPulldown.getEntry());
         mQuickPulldown.setOnPreferenceChangeListener(this);
+
+        mSmartPulldown = (ListPreference) findPreference(SMART_PULLDOWN);
+        mSmartPulldown.setOnPreferenceChangeListener(this);
+        int smartPulldown = Settings.System.getInt(getContentResolver(),
+                Settings.System.QS_SMART_PULLDOWN, 0);
+        mSmartPulldown.setValue(String.valueOf(smartPulldown));
+        updateSmartPulldownSummary(smartPulldown);
 
     }
 
@@ -158,12 +167,43 @@ public class HazySettings extends SettingsPreferenceFragment implements
                 Settings.System.STATUS_BAR_QUICK_QS_PULLDOWN, quickPulldown);
             mQuickPulldown.setSummary(mQuickPulldown.getEntries()[index]);
         }
+        if (preference == mSmartPulldown) {
+            int smartPulldown = Integer.valueOf((String) objValue);
+            Settings.System.putInt(getContentResolver(),
+                    Settings.System.QS_SMART_PULLDOWN,
+                    smartPulldown);
+            updateSmartPulldownSummary(smartPulldown);
+        }
         return true;
     }
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
         return false;
+    }
+
+    private void updateSmartPulldownSummary(int value) {
+        Resources res = getResources();
+        if (value == 0) {
+            // Smart pulldown deactivated
+            mSmartPulldown.setSummary(res.getString(R.string.smart_pulldown_off));
+        } else {
+            String type = null;
+            switch (value) {
+                case 1:
+                    type = res.getString(R.string.smart_pulldown_dismissable);
+                    break;
+                case 2:
+                    type = res.getString(R.string.smart_pulldown_persistent);
+                    break;
+                default:
+                    type = res.getString(R.string.smart_pulldown_all);
+                    break;
+            }
+            // Remove title capitalized formatting
+            type = type.toLowerCase();
+            mSmartPulldown.setSummary(res.getString(R.string.smart_pulldown_summary, type));
+        }
     }
 
     public static final Indexable.SearchIndexProvider SEARCH_INDEX_DATA_PROVIDER =
