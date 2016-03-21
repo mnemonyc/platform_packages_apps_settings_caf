@@ -64,10 +64,20 @@
                 android:title="@string/firmware_version"
                 android:summary="@string/device_info_default"/>
 
-        <!-- Hazy version -->
+        <!-- Hazy version parameter-->
         <Preference android:key="hazy_version"
                 style="?android:preferenceInformationStyle"
                 android:title="@string/hazy_version"
+                android:summary="@string/hazy_version_default" />
+
+        <Preference android:key="hazy_modversion"
+                style="?android:preferenceInformationStyle"
+                android:title="@string/hazy_modversion"
+                android:summary="@string/hazy_version_default" />
+
+        <Preference android:key="hazy_date_version"
+                style="?android:preferenceInformationStyle"
+                android:title="@string/hazy_date_version"
                 android:summary="@string/hazy_version_default" />
 
         <!-- Security patch level -->

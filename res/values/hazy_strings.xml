@@ -20,6 +20,8 @@
 
     <!-- Hazy version -->
     <string name="hazy_version">Hazy version</string>
+	<string name="hazy_modversion">Hazy Mod Version</string>
+    <string name="hazy_date_version">Hazy release date</string>
     <string name="hazy_version_default">Unknown</string>
 
     <!-- tap-to-sleep -->

@@ -85,6 +85,8 @@ public class DeviceInfoSettings extends SettingsPreferenceFragment implements In
     private static final String KEY_DEVICE_FRONT_CAMERA = "device_front_camera";
     private static final String KEY_DEVICE_SCREEN_RESOLUTION = "device_screen_resolution";
     private static final String KEY_HAZY_VERSION = "hazy_version";
+    private static final String KEY_HAZY_MODVERSION = "hazy_modversion";
+    private static final String KEY_HAZY_DATE_VERSION = "hazy_date_version";
 
     static final int TAPS_TO_BE_A_DEVELOPER = 7;
 
@@ -134,6 +136,10 @@ public class DeviceInfoSettings extends SettingsPreferenceFragment implements In
         findPreference(KEY_KERNEL_VERSION).setSummary(getFormattedKernelVersion());
         setValueSummary(KEY_HAZY_VERSION, "ro.hazy.version");
         findPreference(KEY_HAZY_VERSION).setEnabled(true);
+        setValueSummary(KEY_HAZY_MODVERSION, "ro.modversion");
+        findPreference(KEY_HAZY_MODVERSION).setEnabled(true);
+        setValueSummary(KEY_HAZY_DATE_VERSION, "ro.hazy.date");
+        findPreference(KEY_HAZY_DATE_VERSION).setEnabled(true);
 
         if (!SELinux.isSELinuxEnabled()) {
             String status = getResources().getString(R.string.selinux_status_disabled);
