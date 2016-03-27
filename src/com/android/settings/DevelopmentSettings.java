@@ -71,6 +71,7 @@ import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.internal.logging.MetricsLogger;
 import com.android.settings.fuelgauge.InactiveApps;
@@ -112,10 +113,9 @@ public class DevelopmentSettings extends SettingsPreferenceFragment
     private static final String LOCAL_BACKUP_PASSWORD = "local_backup_password";
     private static final String HARDWARE_UI_PROPERTY = "persist.sys.ui.hw";
     private static final String MSAA_PROPERTY = "debug.egl.force_msaa";
-    private static final String BUGREPORT = "bugreport";
-    private static final String BUGREPORT_IN_POWER_KEY = "bugreport_in_power";
     private static final String OPENGL_TRACES_PROPERTY = "debug.egl.trace";
     private static final String TUNER_UI_KEY = "tuner_ui";
+    private static final String COLOR_TEMPERATURE_PROPERTY = "persist.sys.debug.color_temp";
 
     private static final String DEBUG_APP_KEY = "debug_app";
     private static final String WAIT_FOR_DEBUGGER_KEY = "wait_for_debugger";
@@ -157,6 +157,7 @@ public class DevelopmentSettings extends SettingsPreferenceFragment
     private static final String WIFI_LEGACY_DHCP_CLIENT_KEY = "legacy_dhcp_client";
     private static final String MOBILE_DATA_ALWAYS_ON = "mobile_data_always_on";
     private static final String KEY_COLOR_MODE = "color_mode";
+    private static final String COLOR_TEMPERATURE_KEY = "color_temperature";
 
     private static final String INACTIVE_APPS_KEY = "inactive_apps";
 
@@ -171,6 +172,8 @@ public class DevelopmentSettings extends SettingsPreferenceFragment
     private static final String PACKAGE_MIME_TYPE = "application/vnd.android.package-archive";
 
     private static final String TERMINAL_APP_PACKAGE = "com.android.terminal";
+
+    private static final String ADVANCED_REBOOT_KEY = "advanced_reboot";
 
     private static final int RESULT_DEBUG_APP = 1000;
     private static final int RESULT_MOCK_LOCATION_APP = 1001;
@@ -198,8 +201,6 @@ public class DevelopmentSettings extends SettingsPreferenceFragment
     private SwitchPreference mEnableAdb;
     private Preference mClearAdbKeys;
     private SwitchPreference mEnableTerminal;
-    private Preference mBugreport;
-    private SwitchPreference mBugreportInPower;
     private SwitchPreference mKeepScreenOn;
     private SwitchPreference mBtHciSnoopLog;
     private SwitchPreference mEnableOemUnlock;
@@ -255,6 +256,9 @@ public class DevelopmentSettings extends SettingsPreferenceFragment
     private SwitchPreference mShowAllANRs;
 
     private ColorModePreference mColorModePreference;
+
+    private SwitchPreference mAdvancedReboot;
+    private SwitchPreference mColorTemperaturePreference;
 
     private final ArrayList<Preference> mAllPrefs = new ArrayList<Preference>();
 
@@ -316,8 +320,6 @@ public class DevelopmentSettings extends SettingsPreferenceFragment
             mEnableTerminal = null;
         }
 
-        mBugreport = findPreference(BUGREPORT);
-        mBugreportInPower = findAndInitSwitchPref(BUGREPORT_IN_POWER_KEY);
         mKeepScreenOn = findAndInitSwitchPref(KEEP_SCREEN_ON);
         mBtHciSnoopLog = findAndInitSwitchPref(BT_HCI_SNOOP_LOG);
         mEnableOemUnlock = findAndInitSwitchPref(ENABLE_OEM_UNLOCK);
@@ -329,6 +331,7 @@ public class DevelopmentSettings extends SettingsPreferenceFragment
         mDebugViewAttributes = findAndInitSwitchPref(DEBUG_VIEW_ATTRIBUTES);
         mPassword = (PreferenceScreen) findPreference(LOCAL_BACKUP_PASSWORD);
         mAllPrefs.add(mPassword);
+        mAdvancedReboot = findAndInitSwitchPref(ADVANCED_REBOOT_KEY);
 
 
         if (!android.os.Process.myUserHandle().equals(UserHandle.OWNER)) {
@@ -336,6 +339,7 @@ public class DevelopmentSettings extends SettingsPreferenceFragment
             disableForUser(mClearAdbKeys);
             disableForUser(mEnableTerminal);
             disableForUser(mPassword);
+            disableForUser(mAdvancedReboot);
         }
 
         mDebugAppPref = findPreference(DEBUG_APP_KEY);
@@ -420,6 +424,15 @@ public class DevelopmentSettings extends SettingsPreferenceFragment
         if (mColorModePreference.getTransformsCount() < 2) {
             removePreference(KEY_COLOR_MODE);
             mColorModePreference = null;
+        }
+
+        mColorTemperaturePreference = (SwitchPreference) findPreference(COLOR_TEMPERATURE_KEY);
+        if (getResources().getBoolean(R.bool.config_enableColorTemperature)) {
+            mAllPrefs.add(mColorTemperaturePreference);
+            mResetSwitchPrefs.add(mColorTemperaturePreference);
+        } else {
+            removePreference(COLOR_TEMPERATURE_KEY);
+            mColorTemperaturePreference = null;
         }
     }
 
@@ -578,8 +591,6 @@ public class DevelopmentSettings extends SettingsPreferenceFragment
                     context.getPackageManager().getApplicationEnabledSetting(TERMINAL_APP_PACKAGE)
                             == PackageManager.COMPONENT_ENABLED_STATE_ENABLED);
         }
-        updateSwitchPreference(mBugreportInPower, Settings.Secure.getInt(cr,
-                Settings.Secure.BUGREPORT_IN_POWER_MENU, 0) != 0);
         updateSwitchPreference(mKeepScreenOn, Settings.Global.getInt(cr,
                 Settings.Global.STAY_ON_WHILE_PLUGGED_IN, 0) != 0);
         updateSwitchPreference(mBtHciSnoopLog, Settings.Secure.getInt(cr,
@@ -617,7 +628,6 @@ public class DevelopmentSettings extends SettingsPreferenceFragment
         updateAppProcessLimitOptions();
         updateShowAllANRsOptions();
         updateVerifyAppsOverUsbOptions();
-        updateBugreportOptions();
         updateForceRtlOptions();
         updateLogdSizeValues();
         updateWifiDisplayCertificationOptions();
@@ -628,6 +638,21 @@ public class DevelopmentSettings extends SettingsPreferenceFragment
         updateMobileDataAlwaysOnOptions();
         updateSimulateColorSpace();
         updateUSBAudioOptions();
+        updateAdvancedRebootOptions();
+    }
+
+    private void writeAdvancedRebootOptions() {
+        Settings.Secure.putInt(getActivity().getContentResolver(),
+                Settings.Secure.ADVANCED_REBOOT,
+                mAdvancedReboot.isChecked() ? 1 : 0);
+    }
+
+    private void updateAdvancedRebootOptions() {
+        mAdvancedReboot.setChecked(Settings.Secure.getInt(getActivity().getContentResolver(),
+                Settings.Secure.ADVANCED_REBOOT, 0) != 0);
+        if (mColorTemperaturePreference != null) {
+            updateColorTemperature();
+        }
     }
 
     private void resetDangerousOptions() {
@@ -850,37 +875,6 @@ public class DevelopmentSettings extends SettingsPreferenceFragment
     private void setEnableMultiWindow(boolean value) {
         SystemProperties.set(MULTI_WINDOW_SYSTEM_PROPERTY, String.valueOf(value));
         pokeSystemProperties();
-    }
-
-    private void updateBugreportOptions() {
-        final ComponentName bugreportStorageProviderComponentName =
-                new ComponentName("com.android.shell",
-                        "com.android.shell.BugreportStorageProvider");
-        if ("user".equals(Build.TYPE)) {
-            final ContentResolver resolver = getActivity().getContentResolver();
-            final boolean adbEnabled = Settings.Global.getInt(
-                    resolver, Settings.Global.ADB_ENABLED, 0) != 0;
-            if (adbEnabled) {
-                mBugreport.setEnabled(true);
-                mBugreportInPower.setEnabled(true);
-                getPackageManager().setComponentEnabledSetting(
-                        bugreportStorageProviderComponentName,
-                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED, 0);
-            } else {
-                mBugreport.setEnabled(false);
-                mBugreportInPower.setEnabled(false);
-                mBugreportInPower.setChecked(false);
-                Settings.Secure.putInt(resolver, Settings.Secure.BUGREPORT_IN_POWER_MENU, 0);
-                getPackageManager().setComponentEnabledSetting(
-                        bugreportStorageProviderComponentName,
-                        PackageManager.COMPONENT_ENABLED_STATE_DEFAULT, 0);
-            }
-        } else {
-            mBugreportInPower.setEnabled(true);
-            getPackageManager().setComponentEnabledSetting(
-                    bugreportStorageProviderComponentName,
-                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED, 0);
-        }
     }
 
     // Returns the current state of the system property that controls
@@ -1172,6 +1166,18 @@ public class DevelopmentSettings extends SettingsPreferenceFragment
         }
     }
 
+    private void updateColorTemperature() {
+        updateSwitchPreference(mColorTemperaturePreference,
+                SystemProperties.getBoolean(COLOR_TEMPERATURE_PROPERTY, false));
+    }
+
+    private void writeColorTemperature() {
+        SystemProperties.set(COLOR_TEMPERATURE_PROPERTY,
+                mColorTemperaturePreference.isChecked() ? "1" : "0");
+        pokeSystemProperties();
+        Toast.makeText(getActivity(), R.string.color_temperature_toast, Toast.LENGTH_LONG).show();
+    }
+
     private void updateUSBAudioOptions() {
         updateSwitchPreference(mUSBAudio, Settings.Secure.getInt(getContentResolver(),
                 Settings.Secure.USB_AUDIO_AUTOMATIC_ROUTING_DISABLED, 0) != 0);
@@ -1193,7 +1199,7 @@ public class DevelopmentSettings extends SettingsPreferenceFragment
         boolean value = mForceRtlLayout.isChecked();
         Settings.Global.putInt(getActivity().getContentResolver(),
                 Settings.Global.DEVELOPMENT_FORCE_RTL, value ? 1 : 0);
-        SystemProperties.set(Settings.Global.DEVELOPMENT_FORCE_RTL, value ? "1" : "0");
+        SystemProperties.set(Settings.Global.DEVELOPMENT_FORCE_RTL, value ? "true" : "false");
         LocalePicker.updateLocale(getActivity().getResources().getConfiguration().locale);
     }
 
@@ -1609,7 +1615,6 @@ public class DevelopmentSettings extends SettingsPreferenceFragment
                         Settings.Global.ADB_ENABLED, 0);
                 mVerifyAppsOverUsb.setEnabled(false);
                 mVerifyAppsOverUsb.setChecked(false);
-                updateBugreportOptions();
             }
         } else if (preference == mClearAdbKeys) {
             if (mAdbKeysDialog != null) dismissDialogs();
@@ -1623,10 +1628,6 @@ public class DevelopmentSettings extends SettingsPreferenceFragment
             pm.setApplicationEnabledSetting(TERMINAL_APP_PACKAGE,
                     mEnableTerminal.isChecked() ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
                             : PackageManager.COMPONENT_ENABLED_STATE_DEFAULT, 0);
-        } else if (preference == mBugreportInPower) {
-            Settings.Secure.putInt(getActivity().getContentResolver(),
-                    Settings.Secure.BUGREPORT_IN_POWER_MENU,
-                    mBugreportInPower.isChecked() ? 1 : 0);
         } else if (preference == mKeepScreenOn) {
             Settings.Global.putInt(getActivity().getContentResolver(),
                     Settings.Global.STAY_ON_WHILE_PLUGGED_IN,
@@ -1705,10 +1706,14 @@ public class DevelopmentSettings extends SettingsPreferenceFragment
             writeLegacyDhcpClientOptions();
         } else if (preference == mMobileDataAlwaysOn) {
             writeMobileDataAlwaysOnOptions();
+        } else if (preference == mColorTemperaturePreference) {
+            writeColorTemperature();
         } else if (preference == mUSBAudio) {
             writeUSBAudioOptions();
         } else if (INACTIVE_APPS_KEY.equals(preference.getKey())) {
             startInactiveAppsFragment();
+        } else if (preference == mAdvancedReboot) {
+            writeAdvancedRebootOptions();
         } else {
             return super.onPreferenceTreeClick(preferenceScreen, preference);
         }
@@ -1797,7 +1802,6 @@ public class DevelopmentSettings extends SettingsPreferenceFragment
                         Settings.Global.ADB_ENABLED, 1);
                 mVerifyAppsOverUsb.setEnabled(true);
                 updateVerifyAppsOverUsbOptions();
-                updateBugreportOptions();
             } else {
                 // Reset the toggle
                 mEnableAdb.setChecked(false);

@@ -58,8 +58,6 @@
 
     <dimen name="pager_tabs_padding">0dp</dimen>
 
-    <dimen name="circle_avatar_size">40dp</dimen>
-
     <!-- Minimum width for the popup for updating a user's photo. -->
     <dimen name="update_user_photo_popup_min_width">300dip</dimen>
 
@@ -115,11 +113,11 @@
     <dimen name="dashboard_tile_minimum_height">72dp</dimen>
 
     <!-- Dashboard image tile size -->
-    <dimen name="dashboard_tile_image_size">24dp</dimen>
+    <dimen name="dashboard_tile_image_size">72dp</dimen>
 
     <!-- Dashboard tile image margin start / end -->
-    <dimen name="dashboard_tile_image_margin_start">16dp</dimen>
-    <dimen name="dashboard_tile_image_margin_end">32dp</dimen>
+    <dimen name="dashboard_tile_image_margin_start">0dp</dimen>
+    <dimen name="dashboard_tile_image_margin_end">0dp</dimen>
 
     <!-- SwitchBar margin start / end -->
     <dimen name="switchbar_margin_start">16dp</dimen>
